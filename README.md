@@ -18,5 +18,19 @@ As well inside:
   configuration of this monitoring example.
 * The [prometheus/](prometheus/) directory contains the necessary
   building blocks to setup the a dockerized prometheus instance as well
-  of using the jmx_exporter to be able to pull jmx metrics out of the
+  of using jmx_exporter to be able to pull jmx metrics out of the
   kafka clients and the brokers into prometheus.
+
+
+## How to use this blocs
+
+In a local environment, mostly with the objective to show and tell the
+prometheus setup, you could in case of need, start the local Apache Kafka cluster. You can do that by following the commands explained in dummy kafka cluster [docker-kafka-cluster/README.md](readme file).
+
+Once you have a local cluster the next steps are to setup the prometheus
+environment, while in production you will set this with something like
+kubernetes, in the case of this repo we'll use again docker compose. You
+will find all necessary bits explained at the prometheus[prometheus/README.md](readme) file.
+
+At the end, only thing missed is to generate traffic, for this you can
+leverage either your own applications or the example code located at [SimpleKafkaClients/](SimpleKafkaClients/).
