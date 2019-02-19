@@ -25,12 +25,12 @@ As well inside:
 ## How to use this blocs
 
 In a local environment, mostly with the objective to show and tell the
-prometheus setup, you could in case of need, start the local Apache Kafka cluster. You can do that by following the commands explained in dummy kafka cluster [docker-kafka-cluster/README.md](readme file).
+prometheus setup, you could in case of need, start the local Apache Kafka cluster. You can do that by following the commands explained in dummy docker-kafka-cluster/README.md file.
 
 Once you have a local cluster the next steps are to setup the prometheus
 environment, while in production you will set this with something like
 kubernetes, in the case of this repo we'll use again docker compose. You
-will find all necessary bits explained at the prometheus[prometheus/README.md](readme) file.
+will find all necessary bits explained at the prometheus/README.md file.
 
 At the end, only thing missed is to generate traffic, for this you can
 leverage either your own applications or the example code located at [SimpleKafkaClients/](SimpleKafkaClients/).
