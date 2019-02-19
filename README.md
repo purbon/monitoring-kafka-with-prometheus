@@ -34,3 +34,14 @@ will find all necessary bits explained at the prometheus/README.md file.
 
 At the end, only thing missed is to generate traffic, for this you can
 leverage either your own applications or the example code located at [SimpleKafkaClients/](SimpleKafkaClients/).
+
+
+## Contributing
+
+All contributions are welcome: ideas, patches, documentation, bug reports,
+complaints, etc!
+
+Programming is not a required skill, and there are many ways to help out!
+It is more important to us that you are able to contribute.
+
+That said, [some basic guidelines](CONTRIBUTING.md), which you are free to ignore :)
