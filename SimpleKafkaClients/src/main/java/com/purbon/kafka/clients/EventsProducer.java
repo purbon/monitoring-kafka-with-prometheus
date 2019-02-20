@@ -17,7 +17,7 @@ public class EventsProducer {
 
   private Properties configure() {
     Properties props = new Properties();
-    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9091");
     props.put(ProducerConfig.CLIENT_ID_CONFIG, "my-producer");
     props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.LongSerializer");
     props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
