@@ -13,11 +13,16 @@ import org.codehaus.jackson.map.ObjectMapper;
 
 public class EventsProducer {
 
+  private final String kafkaServers;
   private ObjectMapper mapper = new ObjectMapper();
 
-  private Properties configure() {
+  public EventsProducer(String kafkaServers) {
+    this.kafkaServers = kafkaServers;
+  }
+
+  private Properties configure(String kafkaServers) {
     Properties props = new Properties();
-    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9091");
+    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServers);
     props.put(ProducerConfig.CLIENT_ID_CONFIG, "my-producer");
     props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.LongSerializer");
     props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
@@ -26,7 +31,7 @@ public class EventsProducer {
 
   public void load(List<CarEvent> events) throws IOException {
 
-    KafkaProducer<Long, String> producer = new KafkaProducer<>(configure());
+    KafkaProducer<Long, String> producer = new KafkaProducer<>(configure(kafkaServers));
 
     for(CarEvent event : events) {
       String value = mapper.writeValueAsString(event);
@@ -40,8 +45,11 @@ public class EventsProducer {
 
   public static void main(String[] args) throws Exception {
 
-    EventsProducer producer = new EventsProducer();
+    String kafkaServers = "localhost:9092";
+    if (args.length > 1)
+      kafkaServers = args[1];
 
+    EventsProducer producer = new EventsProducer(kafkaServers);
     String[] countries = new String[]{"DE", "UK"};
 
     int numberOfDocs = 100;

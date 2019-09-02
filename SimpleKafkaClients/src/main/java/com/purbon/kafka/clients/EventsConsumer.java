@@ -1,29 +1,20 @@
 package com.purbon.kafka.clients;
 
-import java.io.IOException;
 import java.time.Duration;
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.List;
 import java.util.Properties;
-import java.util.Random;
-import java.util.function.Consumer;
-import org.apache.commons.lang.StringUtils;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.clients.producer.KafkaProducer;
-import org.apache.kafka.clients.producer.ProducerRecord;
 import org.codehaus.jackson.map.ObjectMapper;
 
 public class EventsConsumer {
 
   private ObjectMapper mapper = new ObjectMapper();
 
-  private static Properties configure() {
+  private static Properties configure(String kafkaServers) {
     Properties props = new Properties();
-    props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9091");
+    props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, kafkaServers);
     props.put(ConsumerConfig.GROUP_ID_CONFIG, "my-consumer-group");
     props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.LongDeserializer");
     props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
@@ -33,7 +24,11 @@ public class EventsConsumer {
   public static void main(String[] args) {
 
 
-    KafkaConsumer<Long, String> consumer = new KafkaConsumer<>(configure());
+    String kafkaServers = "localhost:9092";
+    if (args.length > 1)
+      kafkaServers = args[1];
+
+    KafkaConsumer<Long, String> consumer = new KafkaConsumer<>(configure(kafkaServers));
     consumer.subscribe(Collections.singletonList("my-topic"));
 
     while(true) {

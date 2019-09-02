@@ -39,11 +39,11 @@ scrape_configs:
     scrape_timeout: 10s
     static_configs:
       - targets:
-         - 192.168.178.192:8078 # Write here your own IP so the prometheus container can communicate with your local targets
+         - kafka-producer:8078 # Write here your own IP so the prometheus container can communicate with your local targets
 
   - job_name: 'kafka-consumers'
     scrape_interval: 10s
     scrape_timeout: 10s
     static_configs:
       - targets:
-         - 192.168.178.192:8077 # Write here your own IP so the prometheus container can communicate with your local targets
+         - kafka-consumer:8077 # Write here your own IP so the prometheus container can communicate with your local targets
