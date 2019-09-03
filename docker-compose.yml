@@ -15,20 +15,11 @@ services:
     depends_on:
       - zookeeper
     ports:
-      - 9092:9092
+      #- 9092:9092
       - 29092:29092
       - 8079:8079
     environment:
-      KAFKA_BROKER_ID: 1
-      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-      KAFKA_JMX_PORT: 5555
       KAFKA_OPTS: "-javaagent:/jmx-reporter/jmx_prometheus_javaagent.jar=0.0.0.0:8079:/etc/prometheus-config/kafka.yml"
-      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 100
 
   influxdb:
     image: influxdb:1.3.7
@@ -58,24 +49,26 @@ services:
       - kafka
 
   kafka-producer:
-    image: purbon/kafka-client-producer:latest
+    image: purbon/kafka-clients:latest
     container_name: kafka-producer
     ports:
-      - 8078:8078
+     - 8078:8078
     environment:
-      KAFKA_SERVERS: "kafka:9092"
+       KAFKA_SERVERS: "kafka:9092"
+       CLIENT_MODE: "producer"
     depends_on:
-      - kafka
+     - kafka
 
   kafka-consumer:
-      image: purbon/kafka-client-consumer:latest
-      container_name: kafka-consumer
-      ports:
-        - 8077:8077
-      environment:
-        KAFKA_SERVERS: "kafka:9092"
-      depends_on:
-        - kafka
+    image: purbon/kafka-clients:latest
+    container_name: kafka-consumer
+    ports:
+     - 8077:8077
+    environment:
+     KAFKA_SERVERS: "kafka:9092"
+     CLIENT_MODE: "consumer"
+    depends_on:
+     - kafka
 
   prometheus:
     image: prom/prometheus:latest
@@ -86,3 +79,13 @@ services:
     - --config.file=/etc/prometheus/prometheus.yml
     volumes:
     - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+
+  telegraf:
+    image: telegraf:1.4.3
+    restart: on-failure
+    volumes:
+      - /var/run/docker.sock:/tmp/docker.sock
+      - ./telegraf/telegraf-with-kafka-output.conf:/etc/telegraf/telegraf.conf:ro
+    links:
+      - influxdb
+      - kafka

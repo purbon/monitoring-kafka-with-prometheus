@@ -45,7 +45,7 @@ public class EventsProducer {
 
   public static void main(String[] args) throws Exception {
 
-    String kafkaServers = "localhost:9092";
+    String kafkaServers = "kafka:9092";
     if (args.length > 1)
       kafkaServers = args[1];
 
@@ -59,6 +59,7 @@ public class EventsProducer {
     int count = 0;
     while(true) {
       for (int i = 0; i < numberOfDocs; i++) {
+        System.out.println(i+" "+total);
         long viewTime = System.currentTimeMillis();
         String plateId = StringUtils.leftPad(String.valueOf(Math.abs(rand.nextLong()%100000000)), 8);
         String country = countries[rand.nextInt(countries.length)];
@@ -70,11 +71,7 @@ public class EventsProducer {
       producer.load(docs);
       total = total + numberOfDocs;
       System.out.println("Generated: "+total+ "docs");
-      if (count % 5 == 0) {
-        System.out.println("Sleeping 5 seconds");
-        Thread.sleep(5000);
-      }
-
+      Thread.sleep(1000);
       count++;
 
     }

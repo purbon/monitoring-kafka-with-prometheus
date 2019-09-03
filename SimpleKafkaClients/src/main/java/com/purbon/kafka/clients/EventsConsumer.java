@@ -24,7 +24,7 @@ public class EventsConsumer {
   public static void main(String[] args) {
 
 
-    String kafkaServers = "localhost:9092";
+    String kafkaServers = "kafka:9092";
     if (args.length > 1)
       kafkaServers = args[1];
 

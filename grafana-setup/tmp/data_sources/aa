@@ -1,0 +1,1 @@
+{"id":1,"orgId":1,"name":"elasticsearch","type":"elasticsearch","typeLogoUrl":"public/app/plugins/datasource/elasticsearch/img/elasticsearch.svg","access":"proxy","url":"http://elasticsearch:9200","password":"","user":"","database":"logstash-*","basicAuth":false,"isDefault":false,"jsonData":{"timeField":"@timestamp"}}
