@@ -3,38 +3,31 @@
 
 ## What can you find in this repo?
 
-This repository contains the building blocs and configurations necessary to setup monitoring with Prometheus for a running Apache Kafka cluster as well as a dummy clients (producers and consumers) that could be used to test the monitoring setup.
+This repository contains the building blocs and configurations necessary to setup monitoring with Prometheus for a running Apache Kafka cluster as well as a dummy clients (producers, consumers and kafka streams) that could be used to test the monitoring setup.
 
 ### Building blocks
 
-Inside the [SimpleKafkaClients/](SimpleKafkaClients/) directory you will
-find a collection of dummy kafka clients that could be used to verify
-the overall monitoring setup.
 
-As well inside:
-
-* The [docker-kafka-cluster/](docker-kafka-cluster) directory contains
-  as well a dummy kafka cluster that could be used during the setup and
-  configuration of this monitoring example.
+* Graphana
 * The [prometheus/](prometheus/) directory contains the necessary
   building blocks to setup the a dockerized prometheus instance as well
   of using jmx_exporter to be able to pull jmx metrics out of the
   kafka clients and the brokers into prometheus.
-
+* And a bunch kafka clients (consumers, producers)
 
 ## How to use this blocs
 
 In a local environment, mostly with the objective to show and tell the
-prometheus setup, you could in case of need, start the local Apache Kafka cluster. You can do that by following the commands explained in dummy docker-kafka-cluster/README.md file.
+prometheus setup, run:
 
-Once you have a local cluster the next steps are to setup the prometheus
-environment, while in production you will set this with something like
-kubernetes, in the case of this repo we'll use again docker compose. You
-will find all necessary bits explained at the prometheus/README.md file.
+```bash
+ docker-compose up -d --build
+ ```
 
-At the end, only thing missed is to generate traffic, for this you can
-leverage either your own applications or the example code located at [SimpleKafkaClients/](SimpleKafkaClients/).
+and open:
 
+* http://localhost:3000 for Graphana
+* http://localhost:9090 for Prometheus
 
 ## Contributing
 

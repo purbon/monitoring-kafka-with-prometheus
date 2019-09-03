@@ -70,6 +70,16 @@ services:
     depends_on:
      - kafka
 
+  kafka-streams-app:
+      image: purbon/kafka-streams-app:latest
+      container_name: kafka-streams-app
+      ports:
+       - 8099:8099
+      environment:
+       KAFKA_SERVERS: "kafka:9092"
+      depends_on:
+       - kafka
+
   prometheus:
     image: prom/prometheus:latest
     container_name: prometheus

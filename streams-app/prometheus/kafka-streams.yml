@@ -1,0 +1,47 @@
+lowercaseOutputName: true
+
+##
+# Kafka Producer and Consumer metrics for prometheus
+##
+rules:
+# MBean: kafka.streams:type=stream-metrics,thread.client-id=[threadId]
+# MBean: kafka.producer:type=producer-metrics,client-id=([-.w]+)
+- pattern: "kafka.(.*)<type=(.*)-metrics, client-id=(.*)><>(.+):\\s+[\\d+|.]+"
+  name: kafka_$2-metrics
+  labels:
+    client_id: "$3"
+    attr_name: "$4"
+  help: "Kafka global client JMX metric $1 $2-metrics"
+  type: GAUGE
+
+# MBean: kafka.streams:type=stream-[storeType]-state-metrics,client-id=[threadId],task-id=[taskId],[storeType]-state-id=[storeName]
+- pattern: "kafka.streams:type=stream-(.*)-state-metrics,client-id=(.*),task-id=(.*),(.*)-state-id=(.*)"
+  name: kafka_streams_$1_state-metrics
+  labels:
+    store_type: "$1"
+    client_id: "$2"
+    task_id: "$3"
+    store_name: "$5"
+  help: "Kafka streams task metrics for $1 $2 $3 $4"
+  type: GAUGE
+
+# MBean: kafka.streams:type=stream-task-metrics,client-id=[threadId],task-id=[taskId]
+- pattern: "kafka.streams:type=stream-task-metrics,client-id=(.*),task-id=(.*)"
+  name: kafka_streams_tasks-metrics
+  labels:
+    client_id: "$1"
+    task_id: "$2"
+  help: "Kafka streams task metrics for $1 $2"
+  type: GAUGE
+
+# MBean: kafka.producer:type=producer-node-metrics,client-id=([-.w]+),node-id=([0-9]+)
+# MBean: kafka.consumer:type=consumer-node-metrics,client-id=([-.w]+),node-id=([0-9]+)
+- pattern: "kafka.(.*)<type=(.*)-metrics, client-id=(.*), node-id=(.*)><>(.+):\\s+[\\d+|.]+"
+  name: kafka_$2_$5-metrics
+  labels:
+    client_id: "$3"
+    node_id: "$4"
+    attr_name: "$5"
+  help: "Kafka client JMX metric $1 $2-metrics"
+  type: GAUGE
+- pattern : java.lang<type=(.*)>
