@@ -71,7 +71,7 @@ public class EventsProducer {
       producer.load(docs);
       total = total + numberOfDocs;
       System.out.println("Generated: "+total+ "docs");
-      Thread.sleep(1000);
+      Thread.sleep(3000);
       count++;
 
     }
