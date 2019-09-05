@@ -75,10 +75,12 @@ public class KafkaMonitor {
 
     private final String kafkaServers;
     private Long latency;
+    private boolean healthy;
 
     public ConsumerThread(String kafkaServers) {
       this.kafkaServers = kafkaServers;
       this.latency = 0L;
+      this.healthy = false;
     }
 
     public void run() {
@@ -95,8 +97,10 @@ public class KafkaMonitor {
             CarEvent event = eventsConsumer.stringAsCarEvent(consumerRecord.value());
             long latency = System.currentTimeMillis()-event.viewtime;
             setLatency(latency);
+            setHealthy(true);
           } catch (IOException e) {
             e.printStackTrace();
+            setHealthy(false);
           }
 
         });
@@ -115,6 +119,16 @@ public class KafkaMonitor {
     @Override
     public Long getLatency() {
       return latency;
+    }
+
+    @Override
+    public void setHealthy(boolean healthy) {
+      this.healthy = healthy;
+    }
+
+    @Override
+    public boolean getHealth() {
+      return healthy;
     }
   }
 
