@@ -3,7 +3,7 @@
 mvn clean package
 mvn assembly:single
 
-docker build -t purbon/kafka-clients:latest .
+docker build -t purbon/kafka-monitor:latest .
 
 
 # build the producer image
