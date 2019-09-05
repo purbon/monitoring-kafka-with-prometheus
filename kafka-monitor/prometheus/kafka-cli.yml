@@ -1,0 +1,25 @@
+lowercaseOutputName: true
+
+##
+# Kafka Producer and Consumer metrics for prometheus
+##
+rules:
+# MBean: kafka.producer:type=producer-metrics,client-id=([-.w]+)
+- pattern: "kafka.(.*)<type=(.*)-metrics, client-id=(.*)><>(.+):\\s+[\\d+|.]+"
+  name: kafka_$2-metrics
+  labels:
+    client_id: "$3"
+    attr_name: "$4"
+  help: "Kafka global client JMX metric $1 $2-metrics"
+  type: GAUGE
+# MBean: kafka.producer:type=producer-node-metrics,client-id=([-.w]+),node-id=([0-9]+)
+# MBean: kafka.consumer:type=consumer-node-metrics,client-id=([-.w]+),node-id=([0-9]+)
+- pattern: "kafka.(.*)<type=(.*)-metrics, client-id=(.*), node-id=(.*)><>(.+):\\s+[\\d+|.]+"
+  name: kafka_$2_$5-metrics
+  labels:
+    client_id: "$3"
+    node_id: "$4"
+    attr_name: "$5"
+  help: "Kafka client JMX metric $1 $2-metrics"
+  type: GAUGE
+- pattern : java.lang<type=(.*)>
