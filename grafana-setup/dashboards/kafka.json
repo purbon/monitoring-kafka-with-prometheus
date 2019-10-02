@@ -1,4 +1,40 @@
 {
+  "__inputs": [
+    {
+      "name": "DS_PROMETHEUS",
+      "label": "prometheus",
+      "description": "",
+      "type": "datasource",
+      "pluginId": "prometheus",
+      "pluginName": "Prometheus"
+    }
+  ],
+  "__requires": [
+    {
+      "type": "grafana",
+      "id": "grafana",
+      "name": "Grafana",
+      "version": "4.6.1"
+    },
+    {
+      "type": "panel",
+      "id": "graph",
+      "name": "Graph",
+      "version": ""
+    },
+    {
+      "type": "datasource",
+      "id": "prometheus",
+      "name": "Prometheus",
+      "version": "1.0.0"
+    },
+    {
+      "type": "panel",
+      "id": "singlestat",
+      "name": "Singlestat",
+      "version": ""
+    }
+  ],
   "annotations": {
     "list": [
       {
@@ -16,7 +52,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "hideControls": false,
-  "id": 4,
+  "id": null,
   "links": [],
   "refresh": "10s",
   "rows": [
@@ -33,7 +69,7 @@
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -141,7 +177,7 @@
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -249,7 +285,7 @@
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -357,7 +393,7 @@
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -405,7 +441,7 @@
           "targets": [
             {
               "dsType": "influxdb",
-              "expr": "kafka_controller_kafkacontroller_globalpartitioncount",
+              "expr": "sum(kafka_server_replicamanager_partitioncount)",
               "format": "time_series",
               "groupBy": [
                 {
@@ -465,7 +501,7 @@
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -581,7 +617,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "fill": 1,
           "id": 1,
           "legend": {
@@ -609,7 +645,7 @@
           "targets": [
             {
               "dsType": "influxdb",
-              "expr": "sum(kafka_server_brokertopicmetrics_messagesin_total) by (topic)",
+              "expr": "rate(kafka_server_brokertopicmetrics_messagesin_total[5m])",
               "format": "time_series",
               "groupBy": [
                 {
@@ -688,7 +724,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "fill": 1,
           "id": 2,
           "legend": {
@@ -716,7 +752,7 @@
           "targets": [
             {
               "dsType": "influxdb",
-              "expr": "avg(kafka_server_brokertopicmetrics_bytesin_total) by (topic)",
+              "expr": "rate(kafka_server_brokertopicmetrics_bytesin_total[5m])",
               "format": "time_series",
               "groupBy": [
                 {
@@ -795,7 +831,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "fill": 1,
           "id": 16,
           "legend": {
@@ -823,7 +859,7 @@
           "targets": [
             {
               "dsType": "influxdb",
-              "expr": "sum(kafka_server_brokertopicmetrics_bytesout_total) by (topic)",
+              "expr": "rate(kafka_server_brokertopicmetrics_bytesout_total[5m])",
               "format": "time_series",
               "groupBy": [
                 {
@@ -915,7 +951,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "fill": 1,
           "id": 7,
           "legend": {
@@ -1035,7 +1071,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "fill": 1,
           "id": 8,
           "legend": {
@@ -1154,7 +1190,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "fill": 1,
           "id": 9,
           "legend": {
@@ -1273,7 +1309,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "fill": 1,
           "id": 10,
           "legend": {
@@ -1404,7 +1440,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "fill": 1,
           "id": 11,
           "legend": {
@@ -1511,7 +1547,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "fill": 1,
           "id": 12,
           "legend": {
@@ -1618,7 +1654,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "fill": 1,
           "id": 13,
           "legend": {
@@ -1738,7 +1774,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "fill": 1,
           "id": 14,
           "legend": {
@@ -1849,7 +1885,7 @@
             "rgba(237, 129, 40, 0.89)",
             "#d44a3a"
           ],
-          "datasource": "prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "format": "none",
           "gauge": {
             "maxValue": 100,
@@ -1965,7 +2001,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "fill": 1,
           "id": 18,
           "legend": {
@@ -2072,7 +2108,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "fill": 1,
           "id": 19,
           "legend": {
@@ -2179,7 +2215,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "prometheus",
+          "datasource": "${DS_PROMETHEUS}",
           "fill": 1,
           "id": 20,
           "legend": {
@@ -2327,5 +2363,5 @@
   },
   "timezone": "",
   "title": "Kafka",
-  "version": 10
+  "version": 5
 }
