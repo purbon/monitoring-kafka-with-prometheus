@@ -1,7 +1,8 @@
 {
+  "dashboard": {
   "__inputs": [
     {
-      "name": "DS_PROMETHEUS",
+      "name": "prometheus",
       "label": "prometheus",
       "description": "",
       "type": "datasource",
@@ -60,7 +61,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "prometheus",
           "fill": 1,
           "id": 2,
           "legend": {
@@ -140,7 +141,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "prometheus",
           "fill": 1,
           "id": 3,
           "legend": {
@@ -224,7 +225,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "prometheus",
           "fill": 1,
           "id": 5,
           "legend": {
@@ -312,7 +313,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "prometheus",
           "fill": 1,
           "id": 4,
           "legend": {
@@ -405,7 +406,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "prometheus",
           "fill": 1,
           "id": 6,
           "legend": {
@@ -498,7 +499,7 @@
           "bars": false,
           "dashLength": 10,
           "dashes": false,
-          "datasource": "${DS_PROMETHEUS}",
+          "datasource": "prometheus",
           "fill": 1,
           "id": 7,
           "legend": {
@@ -662,4 +663,5 @@
   "timezone": "",
   "title": "Kafka clients",
   "version": 2
+}
 }
