@@ -20,7 +20,7 @@ public class App {
     config.put(StreamsConfig.APPLICATION_ID_CONFIG, "porsche-streams-app");
     config.put(StreamsConfig.CLIENT_ID_CONFIG, "porsche-streams-app-client1");
 
-    config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka:9092");
+    config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "kafka1:29091,kafka2:29092,kafka3:29093");
     config.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
     config.put(StreamsConfig.COMMIT_INTERVAL_MS_CONFIG, 100);
     config.put(StreamsConfig.NUM_STREAM_THREADS_CONFIG, 4);

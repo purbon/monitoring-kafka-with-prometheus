@@ -45,7 +45,7 @@ public class EventsProducer {
 
   public static void main(String[] args) throws Exception {
 
-    String kafkaServers = "kafka:9092";
+    String kafkaServers = "kafka1:29091,kafka2:29092,kafka3:29093";
     if (args.length > 1)
       kafkaServers = args[1];
 

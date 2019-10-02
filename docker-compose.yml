@@ -63,20 +63,87 @@ services:
       - ./zookeeper/zookeeper.yml:/etc/prometheus-config/zookeeper.yml:ro
       - ./jmx-reporter:/jmx-reporter
 
-  kafka:
-    build: kafka/
-    container_name: kafka
+  kafka1:
+    image: confluentinc/cp-enterprise-kafka:5.2.0
+    container_name: kafka1
     depends_on:
       - zookeeper
     ports:
-      #- 9092:9092
-      - 29092:29092
-      - 8079:8079
+      - 9091:9091
     environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181,zookeeper1:2181,zookeeper2:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:29091,PLAINTEXT_HOST://localhost:9091
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 100
+      CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: kafka1:29091,kafka2:29092,kafka3:29093
+      CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: zookeeper:2181,zookeeper1:2181,zookeeper2:2181
+      CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
+      CONFLUENT_METRICS_ENABLE: 'true'
+      CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
       KAFKA_OPTS: "-javaagent:/jmx-reporter/jmx_prometheus_javaagent.jar=0.0.0.0:8079:/etc/prometheus-config/kafka.yml"
     volumes:
       - ./jmx-reporter:/jmx-reporter
       - ./kafka/prometheus/kafka.yml:/etc/prometheus-config/kafka.yml:ro
+
+  kafka2:
+    image: confluentinc/cp-enterprise-kafka:5.2.0
+    container_name: kafka2
+    depends_on:
+      - zookeeper
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_BROKER_ID: 2
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181,zookeeper1:2181,zookeeper2:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka2:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 100
+      CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: kafka1:29091,kafka2:29092,kafka3:29093
+      CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: zookeeper:2181,zookeeper1:2181,zookeeper2:2181
+      CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
+      CONFLUENT_METRICS_ENABLE: 'true'
+      CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+      KAFKA_OPTS: "-javaagent:/jmx-reporter/jmx_prometheus_javaagent.jar=0.0.0.0:8079:/etc/prometheus-config/kafka.yml"
+    volumes:
+      - ./jmx-reporter:/jmx-reporter
+      - ./kafka/prometheus/kafka.yml:/etc/prometheus-config/kafka.yml:ro
+
+  kafka3:
+    image: confluentinc/cp-enterprise-kafka:5.2.0
+    container_name: kafka3
+    depends_on:
+      - zookeeper
+    ports:
+      - 9093:9093
+    environment:
+      KAFKA_BROKER_ID: 3
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181,zookeeper1:2181,zookeeper2:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka3:29093,PLAINTEXT_HOST://localhost:9093
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_METRIC_REPORTERS: io.confluent.metrics.reporter.ConfluentMetricsReporter
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 100
+      CONFLUENT_METRICS_REPORTER_BOOTSTRAP_SERVERS: kafka1:29091,kafka2:29092,kafka3:29093
+      CONFLUENT_METRICS_REPORTER_ZOOKEEPER_CONNECT: zookeeper:2181,zookeeper1:2181,zookeeper2:2181
+      CONFLUENT_METRICS_REPORTER_TOPIC_REPLICAS: 1
+      CONFLUENT_METRICS_ENABLE: 'true'
+      CONFLUENT_SUPPORT_CUSTOMER_ID: 'anonymous'
+      KAFKA_OPTS: "-javaagent:/jmx-reporter/jmx_prometheus_javaagent.jar=0.0.0.0:8079:/etc/prometheus-config/kafka.yml"
+    volumes:
+      - ./jmx-reporter:/jmx-reporter
+      - ./kafka/prometheus/kafka.yml:/etc/prometheus-config/kafka.yml:ro
+
 
   grafana:
     image: grafana/grafana:6.4.1
@@ -93,11 +160,13 @@ services:
     image: framiere/slow-kafka-consumer
     restart: on-failure
     environment:
-      BOOTSTRAP_SERVERS: kafka:9092
+      BOOTSTRAP_SERVERS: kafka1:29091,kafka2:29092,kafka3:29093
       TOPIC: telegraf
       GROUP_ID: slow-consumer
     depends_on:
-      - kafka
+      - kafka1
+      - kafka2
+      - kafka3
 
   kafka-producer:
     image: purbon/kafka-clients:latest
@@ -105,10 +174,12 @@ services:
     ports:
      - 8078:8078
     environment:
-       KAFKA_SERVERS: "kafka:9092"
+       KAFKA_SERVERS: "kafka1:29091,kafka2:29092,kafka3:29093"
        CLIENT_MODE: "producer"
     depends_on:
-     - kafka
+     - kafka1
+     - kafka2
+     - kafka3
 
   kafka-consumer:
     image: purbon/kafka-clients:latest
@@ -116,10 +187,12 @@ services:
     ports:
      - 8077:8077
     environment:
-     KAFKA_SERVERS: "kafka:9092"
+     KAFKA_SERVERS: "kafka1:29091,kafka2:29092,kafka3:29093"
      CLIENT_MODE: "consumer"
     depends_on:
-     - kafka
+     - kafka1
+     - kafka2
+     - kafka3
 
   kafka-streams-app:
       image: purbon/kafka-streams-app:latest
@@ -127,9 +200,11 @@ services:
       ports:
        - 8099:8099
       environment:
-       KAFKA_SERVERS: "kafka:9092"
+       KAFKA_SERVERS: "kafka1:29091"
       depends_on:
-       - kafka
+       - kafka1
+       - kafka2
+       - kafka3
 
   prometheus:
     image: prom/prometheus:latest
