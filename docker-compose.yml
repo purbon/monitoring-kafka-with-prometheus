@@ -2,19 +2,66 @@ version: "3"
 services:
 
   zookeeper:
-    image: confluentinc/cp-zookeeper:5.2.0
     container_name: zookeeper
+    image: confluentinc/cp-zookeeper:5.2.0
     ports:
-      - 2181:2181
       - 8080:8080
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SERVER_ID: 1
+      ZOOKEEPER_SERVERS: zookeeper:2888:3888;zookeeper1:2888:3888;zookeeper2:2888:3888
+      ZOOKEEPER_AUTOPURGE_SNAP_RETAIN_COUNT: 3
+      ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL: 24
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_INIT_LIMIT: 5
       KAFKA_OPTS: "-javaagent:/jmx-reporter/jmx_prometheus_javaagent.jar=0.0.0.0:8080:/etc/prometheus-config/zookeeper.yml"
     volumes:
       - ./zookeeper/zookeeper.yml:/etc/prometheus-config/zookeeper.yml:ro
       - ./jmx-reporter:/jmx-reporter
 
+  zookeeper1:
+    container_name: zookeeper1
+    depends_on:
+      - zookeeper
+    image: confluentinc/cp-zookeeper:5.2.0
+    ports:
+      - 8081:8081
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SERVER_ID: 2
+      ZOOKEEPER_SERVERS: zookeeper:2888:3888;zookeeper1:2888:3888;zookeeper2:2888:3888
+      ZOOKEEPER_AUTOPURGE_SNAP_RETAIN_COUNT: 3
+      ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL: 24
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_INIT_LIMIT: 5
+      KAFKA_OPTS: "-javaagent:/jmx-reporter/jmx_prometheus_javaagent.jar=0.0.0.0:8081:/etc/prometheus-config/zookeeper.yml"
+    volumes:
+      - ./zookeeper/zookeeper.yml:/etc/prometheus-config/zookeeper.yml:ro
+      - ./jmx-reporter:/jmx-reporter
+
+
+  zookeeper2:
+    container_name: zookeeper2
+    depends_on:
+      - zookeeper1
+    image: confluentinc/cp-zookeeper:5.2.0
+    ports:
+      - 8082:8082
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+      ZOOKEEPER_SERVER_ID: 3
+      ZOOKEEPER_SERVERS: zookeeper:2888:3888;zookeeper1:2888:3888;zookeeper2:2888:3888
+      ZOOKEEPER_AUTOPURGE_SNAP_RETAIN_COUNT: 3
+      ZOOKEEPER_AUTOPURGE_PURGE_INTERVAL: 24
+      ZOOKEEPER_SYNC_LIMIT: 2
+      ZOOKEEPER_INIT_LIMIT: 5
+      KAFKA_OPTS: "-javaagent:/jmx-reporter/jmx_prometheus_javaagent.jar=0.0.0.0:8082:/etc/prometheus-config/zookeeper.yml"
+    volumes:
+      - ./zookeeper/zookeeper.yml:/etc/prometheus-config/zookeeper.yml:ro
+      - ./jmx-reporter:/jmx-reporter
 
   kafka:
     build: kafka/
