@@ -22,7 +22,7 @@ services:
       KAFKA_OPTS: "-javaagent:/jmx-reporter/jmx_prometheus_javaagent.jar=0.0.0.0:8079:/etc/prometheus-config/kafka.yml"
 
   grafana:
-    image: grafana/grafana:4.6.1
+    image: grafana/grafana:6.4.1
     ports:
       - "3000:3000"
     environment:
