@@ -27,6 +27,9 @@ services:
       - 8079:8079
     environment:
       KAFKA_OPTS: "-javaagent:/jmx-reporter/jmx_prometheus_javaagent.jar=0.0.0.0:8079:/etc/prometheus-config/kafka.yml"
+    volumes:
+      - ./jmx-reporter:/jmx-reporter
+      - ./kafka/prometheus/kafka.yml:/etc/prometheus-config/kafka.yml:ro
 
   grafana:
     image: grafana/grafana:6.4.1
